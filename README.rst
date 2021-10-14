@@ -17,6 +17,8 @@ three main evolutions from `Airship 1.0`_:
   object in Kubernetes.
 * Make the Airship control plane ephemeral.
 
+>NOTE: this repo supports three (3) control plane nodes and two (2) worker nodes.
+
 To learn more about the Airship 2.0 evolution, reference the
 `Airship blog series`_.
 
