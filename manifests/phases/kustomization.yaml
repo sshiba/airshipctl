@@ -1,0 +1,13 @@
+resources:
+  - phases.yaml
+  - executors.yaml
+  - cluster-map.yaml
+  - ../function/clusterctl
+  # Scripts for generic containers
+  - ../function/phase-helpers
+patchesStrategicMerge:
+  - clusterctl_init_options.yaml
+transformers:
+  # NOTE(aostapenko) Consume AIRSHIPCTL_EPHEMERAL_ISO_URL here that will
+  # have precedence over phase catalogue isoURL value
+  - ../function/bootstrap

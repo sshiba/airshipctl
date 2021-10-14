@@ -1,0 +1,9 @@
+resources:
+  - ../kubeconfig
+  - ../../../type/gating/phases
+  - ../target/catalogues
+  - catalogue.yaml
+transformers:
+  - ../../../function/clusterctl/replacements
+  - ../../../function/bootstrap/replacements
+  - ../../../phases/replacements

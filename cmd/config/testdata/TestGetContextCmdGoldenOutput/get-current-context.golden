@@ -1,0 +1,4 @@
+contexts:
+  ContextBaz:
+    managementConfiguration: ""
+    manifest: Manifest_ContextBaz

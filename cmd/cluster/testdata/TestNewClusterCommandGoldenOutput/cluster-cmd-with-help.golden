@@ -1,0 +1,16 @@
+Provides capabilities for interacting with a Kubernetes cluster,
+such as getting status and deploying initial infrastructure.
+
+Usage:
+  cluster [command]
+
+Available Commands:
+  get-kubeconfig Airshipctl command to retrieve kubeconfig for a desired cluster(s)
+  help           Help about any command
+  list           Airshipctl command to get and list defined clusters
+  status         Retrieve statuses of deployed cluster components
+
+Flags:
+  -h, --help   help for cluster
+
+Use "cluster [command] --help" for more information about a command.

@@ -1,0 +1,27 @@
+apiVersion: airshipit.org/v1alpha1
+kind: ReplacementTransformer
+metadata:
+  name: k8scontrol-cluster-replacements
+  annotations:
+    config.kubernetes.io/function: |-
+      container:
+        image: localhost/replacement-transformer
+replacements:
+- source:
+    objref:
+      name: combined-target-secrets
+    fieldref: ".secretGroups.[name=targetK8sSecrets].values.[name=caCrt].data"
+  target:
+    objref:
+      kind: Secret
+      name: target-cluster-ca
+    fieldrefs: ["{$.data.tls\\.crt}"]
+- source:
+    objref:
+      name: combined-target-secrets
+    fieldref: ".secretGroups.[name=targetK8sSecrets].values.[name=caKey].data"
+  target:
+    objref:
+      kind: Secret
+      name: target-cluster-ca
+    fieldrefs: ["{$.data.tls\\.key}"]

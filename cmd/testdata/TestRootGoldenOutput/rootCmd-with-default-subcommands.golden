@@ -1,0 +1,24 @@
+Command line utility for management of end-to-end kubernetes cluster deployment.
+
+  Find more information at: https://docs.airshipit.org/airshipctl/
+
+Usage:
+  airshipctl [command]
+
+Available Commands:
+  baremetal   Airshipctl command to manage bare metal host(s)
+  cluster     Airshipctl command to manage kubernetes clusters
+  completion  Airshipctl command to generate completion script for the specified shell (bash or zsh)
+  config      Airshipctl command to manage airshipctl config file
+  document    Airshipctl command to manage site manifest documents
+  help        Help about any command
+  phase       Airshipctl command to manage phases
+  plan        Airshipctl command to manage plans
+  version     Airshipctl command to display the current version number
+
+Flags:
+      --airshipconf string   path to the airshipctl configuration file. Defaults to "$HOME/.airship/config"
+      --debug                enable verbose output
+  -h, --help                 help for airshipctl
+
+Use "airshipctl [command] --help" for more information about a command.

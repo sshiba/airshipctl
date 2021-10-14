@@ -1,0 +1,8 @@
+resources:
+  - kubeconfig.yaml
+  - ../target/catalogues/encrypted
+  - ../ephemeral/catalogues/encrypted
+
+transformers:
+  - update.yaml
+  - ../../../function/airshipctl-cleanup/

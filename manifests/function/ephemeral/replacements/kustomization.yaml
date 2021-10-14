@@ -1,0 +1,9 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - ephemeral-env-vars.yaml
+  - networking.yaml
+  - versions.yaml
+  - generated-secrets.yaml
+  - stringData-encode.yaml
+  - cleanup.yaml

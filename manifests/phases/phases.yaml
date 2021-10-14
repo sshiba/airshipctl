@@ -1,0 +1,479 @@
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: initinfra-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply
+  documentEntryPoint: ephemeral/initinfra
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: initinfra-networking-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply-networking
+  documentEntryPoint: ephemeral/initinfra-networking
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: controlplane-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply-controlplane
+  documentEntryPoint: ephemeral/controlplane
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: initinfra-target
+  clusterName: target-cluster
+config:
+  cluster: target-cluster
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply
+  documentEntryPoint: target/initinfra
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: initinfra-networking-target
+  clusterName: target-cluster
+config:
+  cluster: target-cluster
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply-networking
+  documentEntryPoint: target/initinfra-networking
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: controlplane-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply-controlplane
+  documentEntryPoint: target/controlplane
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: workers-target
+  clusterName: target-cluster
+config:
+  cluster: target-cluster
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply
+  documentEntryPoint: target/workers
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: clusterctl-init-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: Clusterctl
+    name: clusterctl_init
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: clusterctl-init-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: Clusterctl
+    name: clusterctl_init
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: clusterctl-move
+  clusterName: target-cluster
+config:
+  siteWideKubeconfig: true
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: Clusterctl
+    name: clusterctl_move
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: workload-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: KubernetesApply
+    name: kubernetes-apply
+  documentEntryPoint: target/workload
+---
+# This phase triggers the deployment of an ephemeral cluster
+# on Azure Cloud platform
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-az-genesis
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-az-genesis
+---
+# This phase triggers the deletion of an ephemeral cluster
+# on Azure Cloud platform
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-az-cleanup
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-az-cleanup
+---
+# This phase triggers the deployment of an ephemeral cluster
+# on Google Cloud platform
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-gcp-genesis
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-gcp-genesis
+---
+# This phase triggers the deletion of an ephemeral cluster
+# on Google Cloud platform
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-gcp-cleanup
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-gcp-cleanup
+---
+# This phase triggers the deployment of an ephemeral cluster
+# on Openstack
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-os-genesis
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-os-genesis
+---
+# This phase triggers the deletion of an ephemeral cluster
+# on Openstack
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: ephemeral-os-cleanup
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BootConfiguration
+    name: ephemeral-os-cleanup
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: secret-update
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: noop-sink
+  documentEntryPoint: encrypted/update
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: secret-show
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: noop-show
+  documentEntryPoint: encrypted/get
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: remotedirect-ephemeral
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BaremetalManager
+    name: RemoteDirectEphemeral
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: iso-cloud-init-data
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: iso-cloud-init-data
+  documentEntryPoint: ephemeral/bootstrap
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: iso-build-image
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: iso-build-image
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: power-off-ephemeral
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: BaremetalManager
+    name: PowerOffEphemeral
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-node-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-node
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-node-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-node
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-get-node-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-get-node
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-get-pods-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-get-pods
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-get-pods-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-get-pods
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-tigera-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-tigera
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-tigera-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-tigera
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-deploy-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-deploy
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-pods-any-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-pods-any
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-pods-ready-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-pods-ready
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-pause-bmh
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-pause-bmh
+  documentEntryPoint: ephemeral/controlplane
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-cluster-ephemeral
+  clusterName: ephemeral-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-cluster-init
+  documentEntryPoint: ephemeral/controlplane
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-cluster-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-cluster
+  documentEntryPoint: ephemeral/controlplane
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: virsh-eject-cdrom-images
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: virsh-eject-cdrom-images
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: virsh-destroy-vms
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: virsh-destroy-vms
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-bmh-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-bmh
+  documentEntryPoint: target/workers
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-wait-label-node-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-wait-label-node
+  documentEntryPoint: target/workers
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-check-ingress-ctrl-target
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: kubectl-check-ingress-ctrl
+---
+apiVersion: airshipit.org/v1alpha1
+kind: Phase
+metadata:
+  name: kubectl-merge-kubeconfig
+  clusterName: target-cluster
+config:
+  executorRef:
+    apiVersion: airshipit.org/v1alpha1
+    kind: GenericContainer
+    name: merge-kubeconfig

@@ -1,0 +1,6 @@
+resources:
+  - ../catalogues
+  - ../../../../type/gating/target/initinfra-networking
+
+transformers:
+  - ../../../../type/gating/target/initinfra-networking/replacements

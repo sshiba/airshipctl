@@ -1,0 +1,16 @@
+Run a phase such as controlplane-ephemeral, remotedirect-ephemeral, initinfra-ephemeral, etc...
+To list the phases associated with a site, run 'airshipctl phase list'.
+
+Usage:
+  run PHASE_NAME [flags]
+
+Examples:
+
+Run initinfra phase
+# airshipctl phase run ephemeral-control-plane
+
+
+Flags:
+      --dry-run                 simulate phase execution
+  -h, --help                    help for run
+      --wait-timeout duration   wait timeout

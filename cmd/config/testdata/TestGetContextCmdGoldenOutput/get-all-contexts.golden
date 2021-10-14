@@ -1,0 +1,4 @@
+contexts:
+  ContextBar:
+    managementConfiguration: ""
+    manifest: Manifest_ContextBar

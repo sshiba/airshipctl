@@ -1,0 +1,36 @@
+apiVersion: airshipit.org/v1alpha1
+kind: ReplacementTransformer
+metadata:
+  name: versions-remotedirect-replacement
+  annotations:
+    config.kubernetes.io/function: |-
+      container:
+        image: localhost/replacement-transformer
+replacements:
+- source:
+    objref:
+      name: versions-remotedirect
+    fieldref: spec.remotedirect.isoURL
+  target:
+    objref:
+      kind: BaremetalManager
+      name: RemoteDirectEphemeral
+    fieldrefs: ["spec.operationOptions.remoteDirect.isoURL%ISO_URL%"]
+- source:
+    objref:
+      name: versions-remotedirect
+    fieldref: spec.remotedirect.node
+  target:
+    objref:
+      kind: BaremetalManager
+      name: RemoteDirectEphemeral
+    fieldrefs: ["spec.hostSelector.name%EPHEMERAL_NODE%"]
+- source:
+    objref:
+      name: versions-remotedirect
+    fieldref: spec.remotedirect.node
+  target:
+    objref:
+      kind: BaremetalManager
+      name: PowerOffEphemeral
+    fieldrefs: ["spec.hostSelector.name%EPHEMERAL_NODE%"]

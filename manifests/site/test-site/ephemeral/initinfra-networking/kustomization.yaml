@@ -1,0 +1,6 @@
+resources:
+  - ../catalogues
+  - ../../../../type/gating/ephemeral/initinfra-networking
+
+transformers:
+  - ../../../../type/gating/ephemeral/initinfra-networking/replacements

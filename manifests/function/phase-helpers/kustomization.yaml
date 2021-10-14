@@ -1,0 +1,15 @@
+resources:
+- wait_node
+- get_pods
+- wait_deploy
+- get_node
+- wait_pods_ready
+- wait_pods_any
+- pause_bmh
+- wait_cluster
+- virsh-eject-cdrom-images
+- virsh-destroy-vms
+- wait_bmh
+- wait_label_node
+- check_ingress_ctrl
+- merge_kubeconfig

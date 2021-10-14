@@ -1,0 +1,4 @@
+contexts:
+  ContextFoo:
+    managementConfiguration: ""
+    manifest: Manifest_ContextFoo

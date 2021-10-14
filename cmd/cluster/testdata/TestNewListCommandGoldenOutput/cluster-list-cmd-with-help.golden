@@ -1,0 +1,17 @@
+Retrieve and list the defined clusters in table form or display just the cluster names. The contents of the
+table would include cluster name, kubeconfig context and parent cluster name.
+
+Usage:
+  list [flags]
+
+Examples:
+
+Retrieve list of clusters
+# airshipctl cluster list --airshipconf /tmp/airconfig
+# airshipctl cluster list -o table
+# airshipctl cluster list -o name
+
+
+Flags:
+  -h, --help            help for list
+  -o, --output string   output formats. Supported options are 'table' and 'name' (default "name")

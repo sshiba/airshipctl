@@ -1,0 +1,14 @@
+resources:
+  - ../../../phases
+  - ../../../function/airshipctl-base-catalogues
+  - plan.yaml
+patchesJson6902:
+  - target:
+      group: airshipit.org
+      version: v1alpha1
+      kind: Clusterctl
+      name: "clusterctl_init"
+    path: infrastructure-providers.json
+transformers:
+  - ../../../function/clusterctl/replacements
+  - ../../../phases/replacements

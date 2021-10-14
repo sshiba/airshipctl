@@ -1,0 +1,7 @@
+Airshipctl command to display the current version number
+
+Usage:
+  version [flags]
+
+Flags:
+  -h, --help   help for version

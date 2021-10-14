@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# The makefile entrypoint driver for document validation
+# Expected to be run from the project root
+set -xe
+set -o pipefail
+
+# The root of the manifest structure to be validated.
+# This corresponds to the targetPath in an airshipctl config
+: ${MANIFEST_ROOT:="$(dirname "${PWD}")"}
+# The space-separated locations of sites whose manifests should be validated.
+# These are relative to MANIFEST_ROOT above
+: ${MANIFEST_PATH:="manifests/site"}
+: ${SITE_ROOTS:="$(basename "${PWD}")/${MANIFEST_PATH}"}
+: ${MANIFEST_REPO_URL:="https://review.opendev.org/airship/airshipctl"}
+: ${SITES_TO_SKIP:="az-test-site gcp-test-site openstack-test-site"}
+
+# Name of specific site to be validated
+SITE=$1
+TMP=$(mktemp -d)
+
+# TODO: use `airshipctl config` to do this once all the needed knobs are exposed
+function generate_airshipconf() {
+  cat <<EOL >"${TMP}/$1.cfg"
+apiVersion: airshipit.org/v1alpha1
+contexts:
+  default_context:
+    manifest: default_manifest
+    managementConfiguration: default_mgmt_config
+currentContext: default_context
+kind: Config
+managementConfiguration:
+  default_mgmt_config:
+    insecure: true
+    systemActionRetries: 30
+    systemRebootDelay: 30
+    type: redfish
+manifests:
+  default_manifest:
+    phaseRepositoryName: primary
+    repositories:
+      primary:
+        checkout:
+          branch: master
+          commitHash: ""
+          force: false
+          tag: ""
+        url: ${MANIFEST_REPO_URL}
+    targetPath: ${MANIFEST_ROOT}
+    metadataPath: ${MANIFEST_PATH}/$1/metadata.yaml
+EOL
+}
+
+for site_root in ${SITE_ROOTS}; do
+  for site in $(ls ${MANIFEST_ROOT}/${site_root}); do
+    sites_to_skip=(${SITES_TO_SKIP})
+    if [[ -z "$SITE" && " ${sites_to_skip[@]} " =~ " ${site} " ]] || [[ ! -z "$SITE" && "$site" != $SITE ]]; then
+      continue
+    fi
+
+    echo -e "\nValidating site: ${MANIFEST_ROOT}/${site_root}/${site}\n****************"
+    generate_airshipconf $site
+    phase_plans=$(airshipctl --airshipconf "${TMP}/$site.cfg" plan list | awk -F'/' '/PhasePlan/ {print $2}' | awk '{print $1}')
+    for plan in $phase_plans; do
+      airshipctl --airshipconf "${TMP}/$site.cfg" plan validate $plan
+    done
+    echo "Validation of site ${site} is successful!"
+  done
+done

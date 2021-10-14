@@ -1,0 +1,19 @@
+List plans defined in site manifest.
+
+Usage:
+  list [flags]
+
+Examples:
+
+List plan
+# airshipctl plan list
+
+List plan(yaml output format)
+# airshipctl plan list -o yaml
+
+List plan(table output format)
+# airshipctl plan list -o table
+
+Flags:
+  -h, --help            help for list
+  -o, --output string   output format. Supported formats are 'table' and 'yaml' (default "table")

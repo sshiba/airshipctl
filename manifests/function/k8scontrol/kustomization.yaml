@@ -1,0 +1,6 @@
+resources:
+  - namespace.yaml
+  - cluster.yaml
+  - controlplane.yaml
+
+namespace: target-infra

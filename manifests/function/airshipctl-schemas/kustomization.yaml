@@ -1,0 +1,3 @@
+resources:
+  - airshipit.org_versionscatalogues.yaml
+  - airshipit.org_networkcatalogues.yaml

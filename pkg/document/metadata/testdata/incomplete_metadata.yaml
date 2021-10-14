@@ -1,0 +1,7 @@
+apiVersion: airshipit.org/v1alpha1
+kind: ManifestMetadata
+metadata:
+  name: manifest-metadata
+spec:
+  phase:
+    path: manifests/site/test-site/phases

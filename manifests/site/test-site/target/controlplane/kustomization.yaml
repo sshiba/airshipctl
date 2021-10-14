@@ -1,0 +1,19 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  # TODO (dukov) It's recommended to upload BareMetalHost objects separately
+  # otherwise nodes will hang in 'registering' state for quite a long time
+  - ../../../../type/gating/target/controlplane
+  - ../catalogues
+  - nodes
+
+namespace: target-infra
+
+patchesStrategicMerge:
+  - patch_controlplane.yaml
+
+commonLabels:
+  airshipit.org/stage: initinfra
+
+transformers:
+  - ../../../../type/gating/target/controlplane/replacements
